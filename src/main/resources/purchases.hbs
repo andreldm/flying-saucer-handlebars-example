@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html {
+            font-family: "Open Sans", sans-serif;
+            font-size: 10px;
+        }
+
+        @page {
+            size: A4;
+            margin: 10px;
+            padding-top: 32px;
+
+            @top-center { content: element(title); }
+            @bottom-right { content: element(footer); }
+        }
+
+        .footer { position: running(footer); text-align: right; }
+        .pagenumber:before { content: counter(page); }
+        .pagecount:before { content: counter(pages); }
+
+        .title {
+            display: block;
+            margin-top: 10px;
+            position: running(title);
+            width: 100%;
+            text-align: center;
+        }
+
+        .customer { page-break-inside: avoid; padding-bottom: 2em; }
+        .customer table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+        .customer td { border: solid black thin; padding: 0 2px; }
+        .customer tr:nth-child(odd) { background-color: #f2f2f2; }
+        .customer th { border: solid black thin; text-align: center; background-color: #d4f2cd; }
+        .customer td:nth-child(1) { width: 65%; }
+        .customer .total-row { font-weight: bold; }
+        .customer .total-row td { border: none; background-color: #fff; }
+    </style>
+</head>
+<body>
+<h1 class="title">Purchases by Customer</h1>
+<div class="footer">Page <span class="pagenumber"></span> of <span class="pagecount"></span></div>
+
+{{#customers}}
+<div class="customer">
+    <div>Customer: {{id}} - {{name}}</div>
+    <div>Address: {{address}}</div>
+    <div>Contact: {{email}} / {{phone}}</div>
+    <div>Customer Since: {{getYear since}}</div>
+    <table>
+        <tr>
+            <th>Product Description</th>
+            <th>Qty</th>
+            <th>Value</th>
+            <th>Purchase Date</th>
+        </tr>
+        {{#purchases}}
+        <tr>
+            <td>{{product}}</td>
+            <td>{{quantity}}</td>
+            <td>{{formatCurrency value}}</td>
+            <td>{{formatDateTime date}}</td>
+        </tr>
+        {{/purchases}}
+        <tr class="total-row">
+            <td class="total">TOTAL</td>
+            <td>{{purchasesQty this}}</td>
+            <td>{{purchasesTotal this}}</td>
+            <td></td>
+        </tr>
+    </table>
+</div>
+{{/customers}}
+
+</body>
+</html>
